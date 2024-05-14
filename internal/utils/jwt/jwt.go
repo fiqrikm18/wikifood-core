@@ -27,6 +27,7 @@ func NewJWTToken() *JWTToken {
 	return &JWTToken{}
 }
 
+// GenerateToken generating jwt token base on claims as payload
 func (j *JWTToken) GenerateToken(jwtClaims JwtClaimsPayload) (string, error) {
 	claims := jwt.MapClaims{
 		"access_token_exp":  jwtClaims.AccesTokenExp,
@@ -44,6 +45,7 @@ func (j *JWTToken) GenerateToken(jwtClaims JwtClaimsPayload) (string, error) {
 	return tokenString, nil
 }
 
+// ValidateToken validating token return true if token is qualified to use and false if not qualified to use
 func (j *JWTToken) ValidateToken(tokenString string, tokenType TokenType) (bool, error) {
 	tokenClaims, err := j.Parse(tokenString)
 	if err != nil {
@@ -63,6 +65,7 @@ func (j *JWTToken) ValidateToken(tokenString string, tokenType TokenType) (bool,
 	return true, nil
 }
 
+// Parse parse token string and return token claims
 func (j *JWTToken) Parse(tokenString string) (*JwtClaimsPayload, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
